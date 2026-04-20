@@ -1,0 +1,7 @@
+{
+  "id": "690b47eb-b4e2-4531-8c1d-0955d6c6b879",
+  "name": "脚本-文本优化",
+  "content": "import 'http://localhost:6621/dist/文本优化/index.js'",
+  "info": "通过AI优化聊天楼层文本，支持OpenAI/DeepSeek/Gemini/Kimi格式，正则匹配提取，原文与优化文本对比，确认后替换",
+  "buttons": []
+}
