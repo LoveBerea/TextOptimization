@@ -1,7 +1,7 @@
 import { createScriptIdDiv, teleportStyle } from '@util/script';
 import 配置界面 from './配置界面.vue';
 import 对比界面 from './对比界面.vue';
-import { extractText, optimizeText, applyOptimization } from './optimizer';
+import { extractText, optimizeText } from './optimizer';
 import { useSettingsStore } from './settings';
 import { currentTask } from './state';
 
@@ -36,15 +36,11 @@ $(() => {
   replaceScriptButtons([
     { name: '优化', visible: true },
     { name: '配置', visible: true },
-    { name: '确认', visible: true },
-    { name: '取消', visible: true },
   ]);
 
   // ---- 绑定按钮事件 ----
   eventOn(getButtonEvent('优化'), () => errorCatched(handleOptimize)());
   eventOn(getButtonEvent('配置'), () => errorCatched(handleConfigToggle)());
-  eventOn(getButtonEvent('确认'), () => errorCatched(handleConfirm)());
-  eventOn(getButtonEvent('取消'), () => errorCatched(handleCancel)());
 
   console.info('[文本优化] 脚本已加载');
 });
@@ -136,33 +132,4 @@ function handleConfigToggle() {
   }
 
   $configApp[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-/** "确认"按钮：替换楼层文本 */
-async function handleConfirm() {
-  const task = currentTask.value;
-  if (!task || task.loading || task.optimizedText === null || task.error) {
-    toastr.info('没有可确认的优化结果', '文本优化');
-    return;
-  }
-
-  try {
-    const store = useSettingsStore();
-    const config = store.activeConfig;
-    await applyOptimization(task.messageId, task.fullMessage, task.optimizedText, config.regex);
-    toastr.success(`楼层 #${task.messageId} 文本已替换`, '文本优化');
-    currentTask.value = null;
-  } catch (err: any) {
-    console.error('[文本优化] 替换失败:', err);
-    toastr.error(err?.message ?? '替换失败', '文本优化');
-  }
-}
-
-/** "取消"按钮：关闭对比界面 */
-function handleCancel() {
-  if (!currentTask.value) {
-    toastr.info('没有进行中的优化任务', '文本优化');
-    return;
-  }
-  currentTask.value = null;
 }

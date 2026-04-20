@@ -128,7 +128,7 @@ async function onRetry() {
 
   try {
     const config = store.activeConfig;
-    const result = await optimizeText(task.value.extract.originalText, config);
+    const result = await optimizeText(task.value.extract.originalText, config, store.activePrompt);
     task.value.optimizedText = result;
   } catch (err: any) {
     console.error('[文本优化] 重试失败:', err);

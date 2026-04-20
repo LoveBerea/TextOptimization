@@ -15,14 +15,6 @@
       {
         "name": "配置",
         "visible": true
-      },
-      {
-        "name": "确认",
-        "visible": true
-      },
-      {
-        "name": "取消",
-        "visible": true
       }
     ]
   },
