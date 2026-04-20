@@ -373,6 +373,7 @@ function onFormatChange() {
 }
 
 
+.text-optimizer_actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 8px;
