@@ -103,7 +103,7 @@ async function handleOptimize() {
 
   // 调用 AI
   try {
-    const result = await optimizeText(extract.originalText, config);
+    const result = await optimizeText(extract.originalText, config, store.activePrompt);
     if (currentTask.value) {
       currentTask.value.optimizedText = result;
     }

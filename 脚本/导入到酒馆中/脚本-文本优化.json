@@ -1,7 +1,30 @@
 {
-  "id": "690b47eb-b4e2-4531-8c1d-0955d6c6b879",
+  "type": "script",
+  "enabled": true,
   "name": "脚本-文本优化",
+  "id": "690b47eb-b4e2-4531-8c1d-0955d6c6b879",
   "content": "import 'http://localhost:6621/dist/文本优化/index.js'",
   "info": "通过AI优化聊天楼层文本，支持OpenAI/DeepSeek/Gemini/Kimi格式，正则匹配提取，原文与优化文本对比，确认后替换",
-  "buttons": []
+  "button": {
+    "enabled": true,
+    "buttons": [
+      {
+        "name": "优化",
+        "visible": true
+      },
+      {
+        "name": "配置",
+        "visible": true
+      },
+      {
+        "name": "确认",
+        "visible": true
+      },
+      {
+        "name": "取消",
+        "visible": true
+      }
+    ]
+  },
+  "data": {}
 }

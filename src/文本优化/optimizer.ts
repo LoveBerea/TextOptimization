@@ -70,9 +70,10 @@ export function extractText(message: string, regexStr: string): ExtractResult {
  *
  * @param text 待优化的文本
  * @param config 当前激活的 AI 配置
+ * @param prompt 当前激活的提示词文本（来自 config.prompt1 或 config.prompt2）
  * @returns AI 返回的优化后文本
  */
-export async function optimizeText(text: string, config: AIConfig): Promise<string> {
+export async function optimizeText(text: string, config: AIConfig, prompt: string): Promise<string> {
   const preset = AI_FORMAT_PRESETS[config.format];
   if (!preset) {
     throw new Error(`未知的 AI 格式: ${config.format}`);
@@ -97,7 +98,7 @@ export async function optimizeText(text: string, config: AIConfig): Promise<stri
     },
     should_silence: true,
     ordered_prompts: [
-      { role: 'system', content: config.prompt },
+      { role: 'system', content: prompt },
       { role: 'user', content: text },
     ],
   });

@@ -15,7 +15,7 @@ src/文本优化/
 
 ## 关键技术决策
 - 使用 `state.ts` 共享状态避免 index.ts 与 对比界面.vue 之间的循环依赖
-- AI 调用使用 `generateRaw` + `custom_api`，不携带酒馆预设
+- 提示词字段：`prompt1`（风格润色）/ `prompt2`（创意扩写）/ `active_prompt`（0 or 1），`activePrompt` computed 由 store 暴露；`optimizeText()` 接受独立 prompt 参数
 - source 映射：openai→'openai', deepseek→'openai', gemini→'google', kimi→'openai'
 - 正则匹配支持捕获组：有捕获组时只替换捕获组部分，无则替换整个匹配
 - webpack 输出路径：`src/文本优化/index.ts` → `dist/文本优化/index.js`

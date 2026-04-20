@@ -24,6 +24,31 @@ export const AI_FORMAT_PRESETS = {
 
 export type AIFormatKey = keyof typeof AI_FORMAT_PRESETS;
 
+/**
+ * 默认提示词预设
+ * prompt1：风格润色——保留语气、修正措辞
+ * prompt2：创意扩写——丰富细节与氛围感
+ */
+export const DEFAULT_PROMPT_1 =
+  `你是一位专业的文字润色师。请对以下文本进行润色优化，要求：
+1. 保持原文的核心含义、情感基调与人称视角不变
+2. 修正语病、冗余表达与不自然的措辞
+3. 提升句子的节奏感与可读性
+4. 不添加原文中不存在的情节或信息
+5. 直接输出优化后的文本，不附加任何说明
+
+待优化文本：`;
+
+export const DEFAULT_PROMPT_2 =
+  `你是一位富有想象力的创意写手。请在保留原文核心情节的基础上，对以下文本进行扩写润色，要求：
+1. 丰富场景细节、感官描写与人物心理
+2. 增强氛围感与沉浸感，使文字更具画面感
+3. 保持原文的人称视角与情感走向
+4. 扩写后长度约为原文的 1.5～2 倍
+5. 直接输出扩写后的文本，不附加任何说明
+
+待扩写文本：`;
+
 /** 单套 AI 配置 */
 const AIConfigSchema = z.object({
   /** 配置名称 */
@@ -38,8 +63,12 @@ const AIConfigSchema = z.object({
   model: z.string().default('gpt-4o-mini'),
   /** 用于提取待优化文本的正则表达式 */
   regex: z.string().default('/(.+)/s'),
-  /** 发送给 AI 的优化提示词 */
-  prompt: z.string().default('请优化以下文本，保持原意和风格，使表达更加流畅自然：'),
+  /** 优化提示词 1（风格润色） */
+  prompt1: z.string().default(DEFAULT_PROMPT_1),
+  /** 优化提示词 2（创意扩写） */
+  prompt2: z.string().default(DEFAULT_PROMPT_2),
+  /** 当前使用哪套提示词 (0=prompt1, 1=prompt2) */
+  active_prompt: z.number().min(0).max(1).default(0),
 });
 
 export type AIConfig = z.infer<typeof AIConfigSchema>;
@@ -68,7 +97,14 @@ export const useSettingsStore = defineStore('text-optimizer-settings', () => {
   /** 获取当前激活的配置 */
   const activeConfig = computed(() => {
     const idx = settings.value.active_config;
-    return settings.value.configs[idx] ?? settings.value.configs[0]!;
+    const cfg = settings.value.configs[idx] ?? settings.value.configs[0]!;
+    return cfg;
+  });
+
+  /** 获取当前激活配置中正在使用的提示词文本 */
+  const activePrompt = computed(() => {
+    const cfg = activeConfig.value;
+    return cfg.active_prompt === 1 ? cfg.prompt2 : cfg.prompt1;
   });
 
   /** 切换激活配置 */
@@ -118,6 +154,7 @@ export const useSettingsStore = defineStore('text-optimizer-settings', () => {
   return {
     settings,
     activeConfig,
+    activePrompt,
     switchConfig,
     updateConfig,
     addConfig,

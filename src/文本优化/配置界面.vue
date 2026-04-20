@@ -111,15 +111,67 @@
             />
           </div>
 
-          <!-- 优化提示词 -->
+          <!-- 优化提示词（双套） -->
           <div class="text-optimizer_field">
             <label class="text-optimizer_label">优化提示词</label>
-            <textarea
-              v-model="currentConfig.prompt"
-              class="text_pole text-optimizer_textarea"
-              rows="3"
-              placeholder="请优化以下文本，保持原意和风格，使表达更加流畅自然："
-            ></textarea>
+
+            <!-- 提示词切换标签 -->
+            <div class="text-optimizer_prompt-tabs">
+              <div
+                class="menu_button text-optimizer_prompt-tab"
+                :class="{ 'text-optimizer_prompt-tab--active': currentConfig.active_prompt === 0 }"
+                @click="currentConfig.active_prompt = 0"
+                title="设为当前使用的提示词"
+              >
+                润色 {{ currentConfig.active_prompt === 0 ? '✓' : '' }}
+              </div>
+              <div
+                class="menu_button text-optimizer_prompt-tab"
+                :class="{ 'text-optimizer_prompt-tab--active': currentConfig.active_prompt === 1 }"
+                @click="currentConfig.active_prompt = 1"
+                title="设为当前使用的提示词"
+              >
+                扩写 {{ currentConfig.active_prompt === 1 ? '✓' : '' }}
+              </div>
+            </div>
+
+            <!-- 提示词 1：风格润色 -->
+            <div class="text-optimizer_prompt-block">
+              <div class="text-optimizer_prompt-header">
+                <span class="text-optimizer_prompt-title">提示词 1 · 风格润色</span>
+                <span
+                  v-if="currentConfig.active_prompt !== 0"
+                  class="text-optimizer_prompt-use-btn menu_button"
+                  @click="currentConfig.active_prompt = 0"
+                >启用</span>
+                <span v-else class="text-optimizer_prompt-active-badge">使用中</span>
+              </div>
+              <textarea
+                v-model="currentConfig.prompt1"
+                class="text_pole text-optimizer_textarea"
+                rows="4"
+                placeholder="保持原意润色提示词…"
+              ></textarea>
+            </div>
+
+            <!-- 提示词 2：创意扩写 -->
+            <div class="text-optimizer_prompt-block">
+              <div class="text-optimizer_prompt-header">
+                <span class="text-optimizer_prompt-title">提示词 2 · 创意扩写</span>
+                <span
+                  v-if="currentConfig.active_prompt !== 1"
+                  class="text-optimizer_prompt-use-btn menu_button"
+                  @click="currentConfig.active_prompt = 1"
+                >启用</span>
+                <span v-else class="text-optimizer_prompt-active-badge">使用中</span>
+              </div>
+              <textarea
+                v-model="currentConfig.prompt2"
+                class="text_pole text-optimizer_textarea"
+                rows="4"
+                placeholder="创意扩写提示词…"
+              ></textarea>
+            </div>
           </div>
 
           <!-- 删除配置按钮（至少保留1个） -->
@@ -266,8 +318,61 @@ function onFormatChange() {
   line-height: 1.5;
 }
 
-/* 操作区 */
-.text-optimizer_actions {
+/* 提示词标签切换行 */
+.text-optimizer_prompt-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.text-optimizer_prompt-tab {
+  flex: 1;
+  text-align: center;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.text-optimizer_prompt-tab--active {
+  background-color: rgba(104, 117, 137, 0.4);
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+/* 单套提示词块 */
+.text-optimizer_prompt-block {
+  margin-bottom: 8px;
+}
+
+.text-optimizer_prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.text-optimizer_prompt-title {
+  font-size: 11px;
+  color: #909090;
+  flex: 1;
+}
+
+.text-optimizer_prompt-use-btn {
+  font-size: 11px;
+  padding: 1px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.text-optimizer_prompt-active-badge {
+  font-size: 11px;
+  color: #76c442;
+  padding: 1px 4px;
+}
+
+
   display: flex;
   justify-content: flex-end;
   margin-top: 8px;
